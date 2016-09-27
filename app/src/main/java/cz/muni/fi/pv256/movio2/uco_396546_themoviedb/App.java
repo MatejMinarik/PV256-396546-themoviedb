@@ -1,6 +1,8 @@
 package cz.muni.fi.pv256.movio2.uco_396546_themoviedb;
 
 import android.app.Application;
+import android.os.StrictMode;
+import android.os.Build;
 
 /**
  * Created by Huvart on 26/09/16.
