@@ -1,0 +1,10 @@
+<resources>
+    <style name="Theme1" parent="Base.Theme.AppCompat.Light">
+    </style>
+
+    <style name="Theme2" parent="Theme1">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+</resources>
