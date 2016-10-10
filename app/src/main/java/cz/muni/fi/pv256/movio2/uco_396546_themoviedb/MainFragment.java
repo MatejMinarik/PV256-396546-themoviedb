@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+import java.util.ArrayList;
 
 /**
  * Created by Huvart on 10/10/16.
@@ -54,7 +55,7 @@ public class MainFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.movie_list_fragment, container, false);
 
         fillListView(view);
 
@@ -82,7 +83,7 @@ public class MainFragment extends Fragment {
 
     private void fillListView(View rootView) {
         // get data
-        ArrayList<Movie> movieList = MovieData.getInstance().getMovieList();
+        ArrayList<Movie> movieList = MoviesContainer.getInstance().getMovieList();
 
         mListView = (ListView) rootView.findViewById(R.id.listview_movies);
 
