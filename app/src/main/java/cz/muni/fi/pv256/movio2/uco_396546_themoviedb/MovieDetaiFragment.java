@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 
 /**
  * Created by Huvart on 10/10/16.
@@ -73,10 +75,12 @@ public class MovieDetaiFragment extends Fragment {
     }
 
     private void setCoverImage(ImageView coverIv, Movie movie) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        Picasso.with(mContext).load(AppData.base_picture_url + movie.getCoverPath()).into(coverIv);
+        Log.d("drowing picture", movie.getCoverPath());
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             coverIv.setImageDrawable(mContext.getDrawable(movie.mCoverId));
         } else {
             coverIv.setImageDrawable(mContext.getResources().getDrawable(movie.mCoverId, mContext.getTheme()));
-        }
+        }*/
     }
 }

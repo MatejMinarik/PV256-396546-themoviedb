@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 /**
@@ -22,12 +24,20 @@ public class MovieListRecyclerAdapter extends RecyclerView.Adapter<MovieListRecy
 
     private Context mContext;
     private List<Movie> mData;
-    ViewHolder.OnMovieSelectListener mListener;
+    private ViewHolder.OnMovieSelectListener mListener;
 
     public MovieListRecyclerAdapter(ViewHolder.OnMovieSelectListener listener, Context context, List<Movie> data) {
         mContext = context;
         mData = data;
         mListener = listener;
+    }
+
+    public List<Movie> getData() {
+        return mData;
+    }
+
+    public void setData(List<Movie> data) {
+        mData = data;
     }
 
     @Override
@@ -52,24 +62,31 @@ public class MovieListRecyclerAdapter extends RecyclerView.Adapter<MovieListRecy
 
     static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener  {
         public ImageView mCoverIv;
+        public TextView mTextView;
         private Movie mMovie;
         private Context mContext;
-        OnMovieSelectListener mListener;
+        private OnMovieSelectListener mListener;
 
         public ViewHolder(View view) {
             super(view);
             mCoverIv = (ImageView) view.findViewById(R.id.list_item_icon);
+            mTextView = (TextView) view.findViewById(R.id.list_item_name);
         }
 
         public void bindView(Context context, Movie movie, OnMovieSelectListener listener) {
             if (movie == null)  return;
             mMovie = movie;
             mContext = context;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            Picasso.with(mContext).load(AppData.base_picture_url + movie.getCoverPath()).placeholder(R.drawable.sandclock_318_10212).error(R.drawable.no_image_available).into(mCoverIv);
+            Log.d("drowing picture", movie.getCoverPath());
+
+            mTextView.setText(movie.getTitle());
+            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 mCoverIv.setImageDrawable(context.getDrawable(movie.mCoverId));
             } else {
                 mCoverIv.setImageDrawable(context.getResources().getDrawable(movie.mCoverId, context.getTheme()));
-            }
+            }*/
             mCoverIv.setScaleType(ImageView.ScaleType.FIT_XY);
             mCoverIv.setOnClickListener(this);
             mCoverIv.setOnLongClickListener(this);

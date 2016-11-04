@@ -12,11 +12,19 @@ import java.util.List;
 
 public class Genre implements Parcelable{
     private List<Movie> mMovieList;
-    private String mGanreName;
+    private String name;
+    private int id;
 
-    public Genre(String ganreName, List<Movie> movieList){
-        mGanreName = ganreName;
+    public  Genre(){
+        name = "none";
+        id = 0;
+        mMovieList = new ArrayList<>();
+    }
+
+    public Genre(String ganreName, int genereId, List<Movie> movieList){
+        name = ganreName;
         mMovieList = movieList;
+        id = genereId;
     }
 
     List<Movie> getMovieList(){
@@ -28,11 +36,19 @@ public class Genre implements Parcelable{
     }
 
     String getGanreName(){
-        return mGanreName;
+        return name;
     }
 
     void setGanreName(String ganreName){
-        mGanreName = ganreName;
+        name = ganreName;
+    }
+
+    public int getGenereId() {
+        return id;
+    }
+
+    public void setGenereId(int genereId) {
+        id = genereId;
     }
 
     @Override
@@ -42,13 +58,15 @@ public class Genre implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mGanreName);
+        dest.writeString(name);
         dest.writeList(mMovieList);
+        dest.writeInt(id);
     }
 
     public Genre(Parcel in) {
-        mGanreName = in.readString();
+        name = in.readString();
         mMovieList = in.readArrayList(null);
+        id = in.readInt();
     }
 
     public static final Parcelable.Creator<Genre> CREATOR = new Parcelable.Creator<Genre>() {

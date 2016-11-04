@@ -1,6 +1,8 @@
 package cz.muni.fi.pv256.movio2.uco_396546_themoviedb;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.Inflater;
 
 /**
  * Created by Huvart on 10/10/16.
@@ -28,6 +32,10 @@ public class MainFragment extends Fragment {
     private MovieListRecyclerAdapter.ViewHolder.OnMovieSelectListener mListener;
     private Context mContext;
     private RecyclerView mRecyclerView;
+    private GenresListRecyclerAdapter mAdapter;
+    LayoutInflater mInflater;
+    ViewGroup mViewGroup;
+    Bundle mBundle;
 
     @Override
     public void onAttach(Context activity) {
@@ -54,29 +62,78 @@ public class MainFragment extends Fragment {
         mContext = getActivity().getApplicationContext();
     }
 
+    public GenresListRecyclerAdapter getAdapter() {
+        return mAdapter;
+    }
+
+    public void setAdapter(GenresListRecyclerAdapter adapter) {
+        mAdapter = adapter;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mInflater = inflater;
+        mViewGroup = container;
+        mBundle = savedInstanceState;
+
+        return createApropriateView(inflater, container, savedInstanceState);
+
+    }
+
+    public void updateView(){
+        View thisView = this.getView();
+        View newView = createApropriateView(mInflater, mViewGroup, mBundle);
+        replaceView(thisView, newView);
+
+    }
+
+    public static ViewGroup getParent(View view) {
+        return (ViewGroup)view.getParent();
+    }
+
+    public static void removeView(View view) {
+        ViewGroup parent = getParent(view);
+        if(parent != null) {
+            parent.removeView(view);
+        }
+    }
+
+    public static void replaceView(View currentView, View newView) {
+        ViewGroup parent = getParent(currentView);
+        if(parent == null) {
+            return;
+        }
+        final int index = parent.indexOfChild(currentView);
+        removeView(currentView);
+        removeView(newView);
+        parent.addView(newView, index);
+    }
+
+    public View createApropriateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        ArrayList<Genre> genreList = GenresContainer.getInstance(this).getGenresList();
         View view;
+        if(isNetworkAvailable()) {
+            if (genreList != null && !genreList.isEmpty()) {
+                view = inflater.inflate(R.layout.movie_genres_list_recycle_fragment, container, false);
+                Log.i("onCreateView:", "inflate movie_genres_list_recycle_fragment");
 
-        ArrayList<Genre> mGenreList = GenresContainer.getInstance().getGenresList();
-        if(mGenreList != null && !mGenreList.isEmpty()) {
-            view = inflater.inflate(R.layout.movie_genres_list_recycle_fragment, container, false);
-            Log.i("onCreateView:", "inflate movie_genres_list_recycle_fragment");
+                fillRecycleView(view, genreList);
+                if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
+                    mPosition = savedInstanceState.getInt(SELECTED_KEY);
 
-            fillRecycleView(view, mGenreList);
-            if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
-                mPosition = savedInstanceState.getInt(SELECTED_KEY);
-
-                if (mPosition != ListView.INVALID_POSITION) {
-                    mRecyclerView.smoothScrollToPosition(mPosition);
+                    if (mPosition != ListView.INVALID_POSITION) {
+                        mRecyclerView.smoothScrollToPosition(mPosition);
+                    }
                 }
+            } else {
+                view = inflater.inflate(R.layout.no_data_fragmet, container, false);
+                Log.i("onCreateView:", "inflate empty");
             }
         }else{
-            view = inflater.inflate(R.layout.no_data_fragmet, container, false);
-            Log.i("onCreateView:", "inflate empty");
+            view = inflater.inflate(R.layout.no_network_fragment, container, false);
+            Log.i("onCreateView:", "no network");
         }
-
         return view;
     }
 
@@ -94,7 +151,7 @@ public class MainFragment extends Fragment {
     private void fillRecycleView(View rootView, ArrayList<Genre> genreList) {
         // get data
 
-        if (genreList != null && !genreList.isEmpty()){
+        //if (genreList != null && !genreList.isEmpty()){
             mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView_genres);
             mRecyclerView.setHasFixedSize(true);
 
@@ -102,13 +159,18 @@ public class MainFragment extends Fragment {
             mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
             setAdapter(mRecyclerView, genreList);
-        }
+        //}
     }
 
     private void setAdapter(RecyclerView filmRV, final ArrayList<Genre> genreList) {
-        GenresListRecyclerAdapter adapter = new GenresListRecyclerAdapter(mListener, mContext, genreList);
-        filmRV.setAdapter(adapter);
+        mAdapter = new GenresListRecyclerAdapter(mListener, mContext, genreList);
+        filmRV.setAdapter(mAdapter);
+    }
 
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
 }

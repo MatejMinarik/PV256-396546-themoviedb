@@ -10,20 +10,38 @@ import android.os.Parcelable;
 public class Movie implements Parcelable {
 
     private long mReleaseDate;
-    private String mCoverPath;
-    private String mTitle;
-    private String mBackdrop;
-    private float mPopularity;
+    private String poster_path;
+    private String title;
+    private String backdrop_path;
+    private float popularity;
+    private int id;
     //temporary
     public int mCoverId;
 
+    public  Movie(){
+        mReleaseDate = 0;
+        mCoverId = R.drawable.stolety_starik;
+        backdrop_path = "";
+        poster_path = "";
+        popularity = 0.0f;
+        title = "";
+    }
+
     public Movie(long releaseDate, String coverPath, String title, String backdrop, float popularity, int coverId){
         mReleaseDate = releaseDate;
-        mCoverPath = coverPath;
-        mTitle = title;
-        mBackdrop = backdrop;
-        mPopularity = popularity;
+        poster_path = coverPath;
+        title = title;
+        backdrop_path = backdrop;
+        popularity = popularity;
         mCoverId = coverId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public long getReleaseDate() {
@@ -35,35 +53,35 @@ public class Movie implements Parcelable {
     }
 
     public String getCoverPath() {
-        return mCoverPath;
+        return poster_path;
     }
 
     public void setCoverPath(String coverPath) {
-        mCoverPath = coverPath;
+        poster_path = coverPath;
     }
 
     public String getTitle() {
-        return mTitle;
+        return title;
     }
 
     public void setTitle(String title) {
-        mTitle = title;
+        title = title;
     }
 
     public String getBackdrop() {
-        return mBackdrop;
+        return backdrop_path;
     }
 
     public void setBackdrop(String backdrop) {
-        mBackdrop = backdrop;
+        backdrop_path = backdrop;
     }
 
     public float getPopularity(){
-        return mPopularity;
+        return popularity;
     }
 
     public void setPopularity(float popularity){
-        mPopularity = popularity;
+        popularity = popularity;
     }
 
     @Override
@@ -73,21 +91,23 @@ public class Movie implements Parcelable {
 
     public Movie(Parcel in) {
         mReleaseDate = in.readLong();
-        mCoverPath = in.readString();
-        mTitle = in.readString();
-        mBackdrop = in.readString();
-        mPopularity = in.readFloat();
+        poster_path = in.readString();
+        title = in.readString();
+        backdrop_path = in.readString();
+        popularity = in.readFloat();
         mCoverId = in.readInt();
+        id = in.readInt();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(mReleaseDate);
-        dest.writeString(mCoverPath);
-        dest.writeString(mTitle);
-        dest.writeString(mBackdrop);
-        dest.writeFloat(mPopularity);
+        dest.writeString(poster_path);
+        dest.writeString(title);
+        dest.writeString(backdrop_path);
+        dest.writeFloat(popularity);
         dest.writeInt(mCoverId);
+        dest.writeInt(id);
     }
 
     public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {

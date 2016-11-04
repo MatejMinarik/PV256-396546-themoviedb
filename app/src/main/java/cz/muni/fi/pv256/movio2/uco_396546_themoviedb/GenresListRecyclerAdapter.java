@@ -19,9 +19,9 @@ import java.util.List;
 
 public class GenresListRecyclerAdapter extends RecyclerView.Adapter<GenresListRecyclerAdapter.ViewHolder> {
 
-    MovieListRecyclerAdapter.ViewHolder.OnMovieSelectListener mListener;
-    Context mContext;
-    ArrayList<Genre> mGenreList;
+    private MovieListRecyclerAdapter.ViewHolder.OnMovieSelectListener mListener;
+    private Context mContext;
+    private ArrayList<Genre> mGenreList;
 
     public GenresListRecyclerAdapter(MovieListRecyclerAdapter.ViewHolder.OnMovieSelectListener listener, Context context, ArrayList<Genre> genreList) {
         mGenreList = genreList;
@@ -29,11 +29,18 @@ public class GenresListRecyclerAdapter extends RecyclerView.Adapter<GenresListRe
         mListener = listener;
     }
 
+    public ArrayList<Genre> getGenreList() {
+        return mGenreList;
+    }
+
+    public void setGenreList(ArrayList<Genre> genreList) {
+        mGenreList = genreList;
+    }
+
     @Override
     public GenresListRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.list_item_genre, parent, false);
-        Log.i("onCreateGenreViewHolder:", view.toString());
         return new GenresListRecyclerAdapter.ViewHolder(view);
     }
 
@@ -48,13 +55,14 @@ public class GenresListRecyclerAdapter extends RecyclerView.Adapter<GenresListRe
         return mGenreList.size();
     }
 
+
     static class ViewHolder extends RecyclerView.ViewHolder {
         private Genre mGenre;
         private RecyclerView mMovieView;
         private TextView mNameView;
-        private View mView;
         private MovieListRecyclerAdapter.ViewHolder.OnMovieSelectListener mListener;
         private Context mContext;
+        public MovieListRecyclerAdapter mAdapter;
 
 
         public ViewHolder(View itemView) {
@@ -70,7 +78,6 @@ public class GenresListRecyclerAdapter extends RecyclerView.Adapter<GenresListRe
             mNameView.setText(item.getGanreName());
 
             mGenre = item;
-            List<Movie> mMovieList = mGenre.getMovieList();
 
             mMovieView.setHasFixedSize(true);
 
@@ -83,8 +90,11 @@ public class GenresListRecyclerAdapter extends RecyclerView.Adapter<GenresListRe
         }
 
         private void setAdapter(RecyclerView movieView, List<Movie> movieList) {
-            MovieListRecyclerAdapter adapter = new MovieListRecyclerAdapter(mListener, mContext, movieList);
-            movieView.setAdapter(adapter);
+            mAdapter = new MovieListRecyclerAdapter(mListener, mContext, movieList);
+            movieView.setAdapter(mAdapter);
         }
+
     }
+
+
 }
