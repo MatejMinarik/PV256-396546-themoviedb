@@ -1,11 +1,19 @@
 package cz.muni.fi.pv256.movio2.uco_396546_themoviedb;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,8 +24,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.zip.Inflater;
 
 /**
  * Created by Huvart on 10/10/16.
@@ -33,14 +39,14 @@ public class MainFragment extends Fragment {
     private Context mContext;
     private RecyclerView mRecyclerView;
     private GenresListRecyclerAdapter mAdapter;
-    LayoutInflater mInflater;
-    ViewGroup mViewGroup;
-    Bundle mBundle;
+    private LayoutInflater mInflater;
+    private ViewGroup mViewGroup;
+    private Bundle mBundle;
+    private ResponseReceiver mReceiver;
 
     @Override
     public void onAttach(Context activity) {
         super.onAttach(activity);
-
         try {
             mListener = (MovieListRecyclerAdapter.ViewHolder.OnMovieSelectListener) activity;
         } catch (ClassCastException e) {
@@ -60,6 +66,19 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mContext = getActivity().getApplicationContext();
+
+        mReceiver = new ResponseReceiver();
+        IntentFilter intentFilter = new IntentFilter(MainFragment.ResponseReceiver.LOCAL_DOWNLOAD);
+        intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(mContext);
+        localBroadcastManager.registerReceiver(mReceiver, intentFilter);
+    }
+
+    @Override
+    public void onDestroy(){
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(mContext);
+        localBroadcastManager.unregisterReceiver(mReceiver);
+        super.onDestroy();
     }
 
     public GenresListRecyclerAdapter getAdapter() {
@@ -77,8 +96,16 @@ public class MainFragment extends Fragment {
         mViewGroup = container;
         mBundle = savedInstanceState;
 
+        startDownload();
+
         return createApropriateView(inflater, container, savedInstanceState);
 
+    }
+
+    private void startDownload() {
+        Intent downloadGenreIntent = new Intent(mContext, DownloadIntentService.class);
+        downloadGenreIntent.putExtra(DownloadIntentService.IS_GENRE, true);
+        mContext.startService(downloadGenreIntent);
     }
 
     public void updateView(){
@@ -111,7 +138,7 @@ public class MainFragment extends Fragment {
     }
 
     public View createApropriateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        ArrayList<Genre> genreList = GenresContainer.getInstance(this).getGenresList();
+        ArrayList<Genre> genreList = GenresContainer.getInstance().getGenresList();
         View view;
         if(isNetworkAvailable()) {
             if (genreList != null && !genreList.isEmpty()) {
@@ -171,6 +198,63 @@ public class MainFragment extends Fragment {
         ConnectivityManager connectivityManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public class ResponseReceiver extends BroadcastReceiver {
+
+        public static final String LOCAL_DOWNLOAD = "cz.muni.fi.pv256.movio2.uco_396546_themoviedb.MainFragmet.intent.action.LOCAL_DOWNLOAD";
+
+        private int genres_downloaded = 0;
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //save date from intent
+            //Genre genre = (Genre)intent.getParcelableExtra("Genres");
+            boolean isGenere = intent.getBooleanExtra(DownloadIntentService.IS_GENRE, false);
+            NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+            int notificationID = 1;
+            NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(mContext)
+                    .setContentTitle("Downloading")
+                    .setContentText("Downloading movies to genres ")
+                    .setSmallIcon(R.drawable.download_icon);
+
+            if(isGenere) {// add Genres
+                ArrayList<Genre> genres = intent.getParcelableArrayListExtra(DownloadIntentService.GENRES);
+                GenresContainer.getInstance().setGenresList(genres);
+
+                notifBuilder.setProgress(genres.size(),0,false);
+                mNotificationManager.notify(notificationID, notifBuilder.build());
+
+                for(int i=0;i<genres.size();i++){
+                    Intent downloadGenreIntent = new Intent(mContext, DownloadIntentService.class);
+                    downloadGenreIntent.putExtra(DownloadIntentService.IS_GENRE, false);
+                    downloadGenreIntent.putExtra(DownloadIntentService.GENRE_APP_ID, i);
+                    downloadGenreIntent.putExtra(DownloadIntentService.GENRE_INTERNET_ID, genres.get(i).getGenereId());
+                    mContext.startService(downloadGenreIntent);
+                }
+                updateView();
+            }else{  //add Movies
+                ArrayList<Movie> movies = intent.getParcelableArrayListExtra(DownloadIntentService.MOVIES);
+                ArrayList<Genre> genres = GenresContainer.getInstance().getGenresList();
+                int genreAppId = intent.getIntExtra(DownloadIntentService.GENRE_APP_ID, 0);
+                genres_downloaded++;
+
+                if(genres_downloaded < genres.size()) {
+                    notifBuilder.setProgress(genres.size(), genreAppId, false);
+                    mNotificationManager.notify(notificationID, notifBuilder.build());
+                }else{
+                    notifBuilder.setProgress(0, 0, false);
+                    notifBuilder.setContentTitle("Downloading done");
+                    mNotificationManager.notify(notificationID, notifBuilder.build());
+                }
+
+                Log.d ("====================",  movies.get(0).getOriginal_title());
+                genres.get(genreAppId).setMovieList(movies);
+                getAdapter().notifyItemChanged(genreAppId);
+                //mNotificationManager.getActiveNotifications()[0].
+            }
+
+        }
     }
 
 }
