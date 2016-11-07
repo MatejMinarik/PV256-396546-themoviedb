@@ -78,8 +78,8 @@ public class MovieListRecyclerAdapter extends RecyclerView.Adapter<MovieListRecy
             mMovie = movie;
             mContext = context;
 
-            Picasso.with(mContext).load(AppData.base_picture_url + movie.getCoverPath()).placeholder(R.drawable.sandclock_318_10212).error(R.drawable.no_image_available).into(mCoverIv);
-            Log.d("drowing picture", movie.getCoverPath());
+            Picasso.with(mContext).load(AppData.base_picture_url + movie.getPoster_path()).placeholder(R.drawable.sandclock_318_10212).error(R.drawable.no_image_available).into(mCoverIv);
+            //Log.d("drowing picture", movie.getPoster_path());
 
             mTextView.setText(movie.getTitle());
             /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

@@ -6,7 +6,7 @@ package cz.muni.fi.pv256.movio2.uco_396546_themoviedb;
 
 public class AppData {
 
-    public static String base_url = "https://api.themoviedb.org/3";
+    public static String base_url = "https://api.themoviedb.org/";
     public static String movie_genere_url(int genere_id){
         return base_url + "/discover/movie?api_key=0b1ade6bdad5ce4b69c4075972d90d36&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=true&page=1&with_genres=" + genere_id;
     }
@@ -17,4 +17,5 @@ public class AppData {
         return base_url + "/genre/movie/list?api_key=0b1ade6bdad5ce4b69c4075972d90d36&language=en-US";
     }
     public static String base_picture_url = "https://image.tmdb.org/t/p/w500";
+    public static String api_key = "0b1ade6bdad5ce4b69c4075972d90d36";
 }
