@@ -18,27 +18,6 @@ public class GenresContainer {
     private GenresContainer() {
     }
 
-    /*public void addGenres(List<Genre> genres){
-        for(int i = 0;i<genres.size();i++){
-            addGenre(genres.get(i));
-        }
-        Log.d("add genres", "should add genres");
-    }
-
-
-    public void addMovies(int genreAppId, List<Movie> movies){
-        for (int i=0;i<movies.size();i++){
-            addMovie(genreAppId, movies.get(i));
-        }
-    }
-
-    public void addMovie(int genreAppId, Movie movie){
-        mGenresList.get(genreAppId).getMovieList().add(movie);
-        /*if(mMainFragment.getAdapter() != null) {
-            mMainFragment.getAdapter().notifyItemChanged(genreAppId);
-        }
-    }*/
-
     public static GenresContainer getInstance() {
         if (sInstance == null) {
             sInstance = new GenresContainer();

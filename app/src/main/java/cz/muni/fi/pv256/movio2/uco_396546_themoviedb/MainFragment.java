@@ -33,6 +33,7 @@ public class MainFragment extends Fragment {
 
     private static final String TAG = MainFragment.class.getSimpleName();
     private static final String SELECTED_KEY = "selected_position";
+    private static final int notificationID = 1;
 
     private int mPosition = 0;
     private MovieListRecyclerAdapter.ViewHolder.OnMovieSelectListener mListener;
@@ -106,6 +107,13 @@ public class MainFragment extends Fragment {
         Intent downloadGenreIntent = new Intent(mContext, DownloadIntentService.class);
         downloadGenreIntent.putExtra(DownloadIntentService.IS_GENRE, true);
         mContext.startService(downloadGenreIntent);
+
+        NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(mContext)
+                .setContentTitle("Downloading")
+                .setContentText("Downloading genres ")
+                .setSmallIcon(R.drawable.download_icon);
+        mNotificationManager.notify(notificationID, notifBuilder.build());
     }
 
     public void updateView(){
@@ -209,10 +217,9 @@ public class MainFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             //save date from intent
-            //Genre genre = (Genre)intent.getParcelableExtra("Genres");
             boolean isGenere = intent.getBooleanExtra(DownloadIntentService.IS_GENRE, false);
             NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-            int notificationID = 1;
+
             NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(mContext)
                     .setContentTitle("Downloading")
                     .setContentText("Downloading movies to genres ")
@@ -248,10 +255,8 @@ public class MainFragment extends Fragment {
                     mNotificationManager.notify(notificationID, notifBuilder.build());
                 }
 
-                Log.d ("====================",  movies.get(0).getOriginal_title());
                 genres.get(genreAppId).setMovieList(movies);
                 getAdapter().notifyItemChanged(genreAppId);
-                //mNotificationManager.getActiveNotifications()[0].
             }
 
         }
