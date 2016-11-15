@@ -1,21 +1,36 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp" >
+    android:layout_height="fill_parent" >
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center_horizontal"
+        <android.support.v7.widget.FitWindowsFrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:background="@color/colorPrimary">
+
+                <ImageView
+                    android:id="@+id/background_picture"
+                    android:layout_gravity="top"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
+
+
+            </LinearLayout>
+
+
 
             <ImageView
                 android:id="@+id/detail_icon"
+                android:layout_gravity="top"
+                android:paddingTop="120dp"
+                android:paddingLeft="30dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -23,18 +38,39 @@
                 android:id="@+id/detail_movie"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="210dp"
+                android:paddingLeft="140dp"
                 android:textAppearance="?android:textAppearanceLarge"
                 android:textColor="@color/colorPrimaryText"
-                android:textSize="12pt" />
+                android:textSize="11pt" />
 
-            <TextView
-                android:id="@+id/detail_movie_low"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:textAppearanceLarge"
-                android:textColor="@color/colorPrimaryText"
-                android:textSize="8pt" />
-        </LinearLayout>
+                android:paddingTop="310dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="top"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="8pt"
+                    android:text="overview:"/>
+
+                <TextView
+                    android:id="@+id/detail_movie_low"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textSize="8pt" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.FitWindowsFrameLayout>
 
     </ScrollView>
 </RelativeLayout>

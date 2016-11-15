@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 
 /**
  * Created by Huvart on 10/10/16.
@@ -62,21 +64,20 @@ public class MovieDetaiFragment extends Fragment {
         TextView titleTv = (TextView) view.findViewById(R.id.detail_movie);
         TextView titleLowTv = (TextView) view.findViewById(R.id.detail_movie_low);
         ImageView coverIv = (ImageView) view.findViewById(R.id.detail_icon);
+        ImageView backgroundIv = (ImageView) view.findViewById(R.id.background_picture);
 
         if (mMovie != null) {
             titleTv.setText(mMovie.getTitle());
-            titleLowTv.setText(mMovie.getBackdrop());
-            setCoverImage(coverIv, mMovie);
+            titleLowTv.setText(mMovie.getOverview());
+
+            Picasso.with(mContext).load(AppData.base_picture_url + mMovie.getPoster_path()).resize(300, 450).into(coverIv);
+
+            Picasso.with(mContext).load(AppData.base_picture_url + mMovie.getBackdrop_path()).into(backgroundIv);
         }
 
         return view;
     }
 
     private void setCoverImage(ImageView coverIv, Movie movie) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            coverIv.setImageDrawable(mContext.getDrawable(movie.mCoverId));
-        } else {
-            coverIv.setImageDrawable(mContext.getResources().getDrawable(movie.mCoverId, mContext.getTheme()));
-        }
     }
 }
