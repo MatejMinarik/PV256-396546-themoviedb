@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:orientation="horizontal"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
@@ -7,7 +8,9 @@
               android:id="@+id/movie_list_fragment"
               android:layout_weight="1"
               android:layout_width="0dp"
-              android:layout_height="match_parent" />
+              android:layout_height="match_parent"
+              tools:context="cz.muni.fi.pv256.movio2.uco_396546_themoviedb.MainActivity"
+              tools:layout="@android:layout/list_content"  />
 
     <fragment android:name="cz.muni.fi.pv256.movio2.uco_396546_themoviedb.MovieDetaiFragment"
               android:id="@+id/movie_detail_fragment"
