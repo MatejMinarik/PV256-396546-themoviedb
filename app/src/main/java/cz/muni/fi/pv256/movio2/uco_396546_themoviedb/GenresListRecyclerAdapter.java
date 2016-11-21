@@ -70,7 +70,6 @@ public class GenresListRecyclerAdapter extends RecyclerView.Adapter<GenresListRe
             mNameView.setText(item.getGanreName());
 
             mGenre = item;
-            List<Movie> mMovieList = mGenre.getMovieList();
 
             mMovieView.setHasFixedSize(true);
 
