@@ -1,17 +1,23 @@
 package cz.muni.fi.pv256.movio2.uco_396546_themoviedb;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
+
 import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.Inflater;
 
 /**
  * Created by Huvart on 10/10/16.
@@ -22,19 +28,23 @@ public class MainFragment extends Fragment {
     private static final String TAG = MainFragment.class.getSimpleName();
     private static final String SELECTED_KEY = "selected_position";
 
-    private int mPosition = ListView.INVALID_POSITION;
-    private OnMovieSelectListener mListener;
+    private int mPosition = 0;
+    private MovieListRecyclerAdapter.ViewHolder.OnMovieSelectListener mListener;
     private Context mContext;
-    private ListView mListView;
+    private RecyclerView mRecyclerView;
+    private GenresListRecyclerAdapter mAdapter;
+    LayoutInflater mInflater;
+    ViewGroup mViewGroup;
+    Bundle mBundle;
 
     @Override
     public void onAttach(Context activity) {
         super.onAttach(activity);
 
         try {
-            mListener = (OnMovieSelectListener) activity;
+            mListener = (MovieListRecyclerAdapter.ViewHolder.OnMovieSelectListener) activity;
         } catch (ClassCastException e) {
-            Log.e(TAG, "Activity must implement OnMovieSelectListener", e);
+            Log.e(TAG, "Activity must implement MovieListRecyclerAdapter.ViewHolder.OnMovieSelectListener", e);
         }
     }
 
@@ -52,21 +62,78 @@ public class MainFragment extends Fragment {
         mContext = getActivity().getApplicationContext();
     }
 
+    public GenresListRecyclerAdapter getAdapter() {
+        return mAdapter;
+    }
+
+    public void setAdapter(GenresListRecyclerAdapter adapter) {
+        mAdapter = adapter;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.movie_list_fragment, container, false);
+        mInflater = inflater;
+        mViewGroup = container;
+        mBundle = savedInstanceState;
 
-        fillListView(view);
+        return createApropriateView(inflater, container, savedInstanceState);
 
-        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
-            mPosition = savedInstanceState.getInt(SELECTED_KEY);
+    }
 
-            if (mPosition != ListView.INVALID_POSITION) {
-                mListView.smoothScrollToPosition(mPosition);
-            }
+    public void updateView(){
+        View thisView = this.getView();
+        View newView = createApropriateView(mInflater, mViewGroup, mBundle);
+        replaceView(thisView, newView);
+
+    }
+
+    public static ViewGroup getParent(View view) {
+        return (ViewGroup)view.getParent();
+    }
+
+    public static void removeView(View view) {
+        ViewGroup parent = getParent(view);
+        if(parent != null) {
+            parent.removeView(view);
         }
+    }
 
+    public static void replaceView(View currentView, View newView) {
+        ViewGroup parent = getParent(currentView);
+        if(parent == null) {
+            return;
+        }
+        final int index = parent.indexOfChild(currentView);
+        removeView(currentView);
+        removeView(newView);
+        parent.addView(newView, index);
+    }
+
+    public View createApropriateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        ArrayList<Genre> genreList = GenresContainer.getInstance(this).getGenresList();
+        View view;
+        if(isNetworkAvailable()) {
+            if (genreList != null && !genreList.isEmpty()) {
+                view = inflater.inflate(R.layout.movie_genres_list_recycle_fragment, container, false);
+                Log.i("onCreateView:", "inflate movie_genres_list_recycle_fragment");
+
+                fillRecycleView(view, genreList);
+                if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
+                    mPosition = savedInstanceState.getInt(SELECTED_KEY);
+
+                    if (mPosition != ListView.INVALID_POSITION) {
+                        mRecyclerView.smoothScrollToPosition(mPosition);
+                    }
+                }
+            } else {
+                view = inflater.inflate(R.layout.no_data_fragmet, container, false);
+                Log.i("onCreateView:", "inflate empty");
+            }
+        }else{
+            view = inflater.inflate(R.layout.no_network_fragment, container, false);
+            Log.i("onCreateView:", "no network");
+        }
         return view;
     }
 
@@ -81,42 +148,29 @@ public class MainFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
-    private void fillListView(View rootView) {
+    private void fillRecycleView(View rootView, ArrayList<Genre> genreList) {
         // get data
-        ArrayList<Movie> movieList = MoviesContainer.getInstance().getMovieList();
 
-        mListView = (ListView) rootView.findViewById(R.id.listview_movies);
+        //if (genreList != null && !genreList.isEmpty()){
+            mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView_genres);
+            mRecyclerView.setHasFixedSize(true);
 
-        if (movieList != null && !movieList.isEmpty()) {
-            setAdapter(mListView, movieList);
-        }
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+            mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+            setAdapter(mRecyclerView, genreList);
+        //}
     }
 
-    private void setAdapter(ListView filmLV, final ArrayList<Movie> movieList) {
-        MovieAdapter adapter = new MovieAdapter(movieList, mContext);
-        filmLV.setAdapter(adapter);
-
-        // set on click listener
-        filmLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mPosition = position;
-                mListener.onMovieSelect(movieList.get(position));
-            }
-        });
-
-        // set on long click listener
-        filmLV.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(mContext, movieList.get(position).getTitle(), Toast.LENGTH_SHORT)
-                        .show();
-                return true;
-            }
-        });
+    private void setAdapter(RecyclerView filmRV, final ArrayList<Genre> genreList) {
+        mAdapter = new GenresListRecyclerAdapter(mListener, mContext, genreList);
+        filmRV.setAdapter(mAdapter);
     }
 
-    public interface OnMovieSelectListener {
-        void onMovieSelect(Movie movie);
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+
 }
