@@ -82,7 +82,7 @@ public class GenresMoviesDownloader extends AsyncTask<Void, String, Integer> {
                 JSONObject jmovie = jarray_movie.getJSONObject(i);
 
                 String movieTimeReleaseString = jmovie.getString("release_date");
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd");
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Date releaseDate = simpleDateFormat.parse(movieTimeReleaseString);
 
                 Movie movieNew = jsonParser.fromJson(jmovie.toString(), Movie.class);
