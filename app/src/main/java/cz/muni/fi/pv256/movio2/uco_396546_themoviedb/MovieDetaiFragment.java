@@ -1,19 +1,21 @@
 package cz.muni.fi.pv256.movio2.uco_396546_themoviedb;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /**
@@ -63,33 +65,36 @@ public class MovieDetaiFragment extends Fragment {
         }
         View view = inflater.inflate(R.layout.movie_detail_fragment, container, false);
 
-        TextView titleTv = (TextView) view.findViewById(R.id.detail_movie);
-        TextView titleLowTv = (TextView) view.findViewById(R.id.detail_movie_low);
+        TextView titleTv = (TextView) view.findViewById(R.id.detail_movie_title);
+        TextView titleLowTv = (TextView) view.findViewById(R.id.detail_movie_overview_text);
+        TextView releaseDateTextView = (TextView) view.findViewById(R.id.detail_movie_release_date);
         ImageView coverIv = (ImageView) view.findViewById(R.id.detail_icon);
         ImageView backgroundIv = (ImageView) view.findViewById(R.id.background_picture);
-        final Button saveToDatabaseButton = (Button) view.findViewById(R.id.button);
+        final FloatingActionButton saveToDatabaseActionButton = (FloatingActionButton) view.findViewById(R.id.floatingActionButton);
 
         if (mMovie != null) {
             titleTv.setText(mMovie.getTitle());
             titleLowTv.setText(mMovie.getOverview());
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd");
+            releaseDateTextView.setText(simpleDateFormat.format(new Date( mMovie.getRelease_date())));
             final MovieManager movieManager = new MovieManager(mContext);
             if(movieManager.movieExist(mMovie)){
                 mFavourite = true;
-                saveToDatabaseButton.setText("-");
+                saveToDatabaseActionButton.setImageResource(android.R.drawable.btn_star_big_on);
             }else{
                 mFavourite = false;
-                saveToDatabaseButton.setText("+");
+                saveToDatabaseActionButton.setImageResource(android.R.drawable.btn_star_big_off);
             }
-            saveToDatabaseButton.setOnClickListener(new View.OnClickListener(){
+            saveToDatabaseActionButton.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View onClickView){
                     if(mFavourite){
                         movieManager.deleteMovie(mMovie);
                         mFavourite = false;
-                        saveToDatabaseButton.setText("+");
+                        saveToDatabaseActionButton.setImageResource(android.R.drawable.btn_star_big_off);
                     }else{
                         movieManager.createMovie(mMovie);
                         mFavourite = true;
-                        saveToDatabaseButton.setText("-");
+                        saveToDatabaseActionButton.setImageResource(android.R.drawable.btn_star_big_on);
                     }
                     Log.d("======================", mMovie.getTitle());
                 }

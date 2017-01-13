@@ -1,6 +1,7 @@
 package cz.muni.fi.pv256.movio2.uco_396546_themoviedb;
 
 import android.test.AndroidTestCase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ public class TestMovieManager extends AndroidTestCase {
 
     @Override
     protected void setUp() throws Exception {
-        mManager = new TestMovieManager(mContext);
+        mManager = new MovieManager(mContext);
     }
 
     @Override
@@ -31,8 +32,8 @@ public class TestMovieManager extends AndroidTestCase {
 
     public void testGetMovies() throws Exception {
         List<Movie> expectedMovies = new ArrayList<>(2);
-        Movie movie1 = createMovie(1, "ahoj", 444444);
-        Movie movie2 = createMovie(2, "bububu", 6666666);
+        Movie movie1 = createMovie(1, "ahoj", new Long(444444));
+        Movie movie2 = createMovie(2, "bububu", new Long(6666666));
         expectedMovies.add(movie1);
         expectedMovies.add(movie2);
 
@@ -47,9 +48,9 @@ public class TestMovieManager extends AndroidTestCase {
     }
 
     public void testMovieExist() throws Exception {
-        Movie movie1 = createMovie(1, "ahoj", 444444);
-        Movie movie2 = createMovie(2, "bububu", 6666666);
-        Movie movie3 = createMovie(3, "habubu", 9999999);
+        Movie movie1 = createMovie(1, "ahoj",   new Long(4444444));
+        Movie movie2 = createMovie(2, "bububu", new Long(6666666));
+        Movie movie3 = createMovie(3, "habubu", new Long(9999999));
 
         mManager.createMovie(movie1);
         mManager.createMovie(movie3);
@@ -64,6 +65,6 @@ public class TestMovieManager extends AndroidTestCase {
         movie.setId(id);
         movie.setTitle(title);
         movie.setRelease_date(releaseDate);
-        return workTime;
+        return movie;
     }
 }
