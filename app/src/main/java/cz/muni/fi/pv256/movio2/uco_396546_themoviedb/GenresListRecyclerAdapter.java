@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +21,13 @@ public class GenresListRecyclerAdapter extends RecyclerView.Adapter<GenresListRe
     private MovieListRecyclerAdapter.ViewHolder.OnMovieSelectListener mListener;
     private Context mContext;
     private ArrayList<Genre> mGenreList;
+    private LayoutInflater mInflater;
 
-    public GenresListRecyclerAdapter(MovieListRecyclerAdapter.ViewHolder.OnMovieSelectListener listener, Context context, ArrayList<Genre> genreList) {
+    public GenresListRecyclerAdapter(LayoutInflater inflater, MovieListRecyclerAdapter.ViewHolder.OnMovieSelectListener listener, Context context, ArrayList<Genre> genreList) {
         mGenreList = genreList;
         mContext = context;
         mListener = listener;
+        mInflater = inflater;
     }
 
     public ArrayList<Genre> getGenreList() {
@@ -39,8 +40,8 @@ public class GenresListRecyclerAdapter extends RecyclerView.Adapter<GenresListRe
 
     @Override
     public GenresListRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.list_item_genre, parent, false);
+        //LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = mInflater.inflate(R.layout.list_item_genre, parent, false);
         return new GenresListRecyclerAdapter.ViewHolder(view);
     }
 
@@ -67,7 +68,7 @@ public class GenresListRecyclerAdapter extends RecyclerView.Adapter<GenresListRe
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mMovieView = (RecyclerView) itemView.findViewById(R.id.recyclerView_genres);
+            mMovieView = (RecyclerView) itemView.findViewById(R.id.recycler_view_genres);
             mNameView = (TextView) itemView.findViewById(R.id.genres_name);
         }
 

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ public class MovieDetaiFragment extends Fragment {
 
     private Movie mMovie;
     private Context mContext;
+    private boolean mFavourite;
 
     public static MovieDetaiFragment newInstance(Movie movie) {
         MovieDetaiFragment fragment = new MovieDetaiFragment();
@@ -37,12 +39,12 @@ public class MovieDetaiFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         mContext = getActivity();
         Bundle args = getArguments();
         if (args != null) {
             mMovie = args.getParcelable(ARGS_MOVIE);
         }
+        super.onCreate(savedInstanceState);
     }
 
     @Nullable
@@ -65,19 +67,41 @@ public class MovieDetaiFragment extends Fragment {
         TextView titleLowTv = (TextView) view.findViewById(R.id.detail_movie_low);
         ImageView coverIv = (ImageView) view.findViewById(R.id.detail_icon);
         ImageView backgroundIv = (ImageView) view.findViewById(R.id.background_picture);
+        final Button saveToDatabaseButton = (Button) view.findViewById(R.id.button);
 
         if (mMovie != null) {
             titleTv.setText(mMovie.getTitle());
             titleLowTv.setText(mMovie.getOverview());
+            final MovieManager movieManager = new MovieManager(mContext);
+            if(movieManager.movieExist(mMovie)){
+                mFavourite = true;
+                saveToDatabaseButton.setText("-");
+            }else{
+                mFavourite = false;
+                saveToDatabaseButton.setText("+");
+            }
+            saveToDatabaseButton.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View onClickView){
+                    if(mFavourite){
+                        movieManager.deleteMovie(mMovie);
+                        mFavourite = false;
+                        saveToDatabaseButton.setText("+");
+                    }else{
+                        movieManager.createMovie(mMovie);
+                        mFavourite = true;
+                        saveToDatabaseButton.setText("-");
+                    }
+                    Log.d("======================", mMovie.getTitle());
+                }
+            });
 
             Picasso.with(mContext).load(AppData.base_picture_url + mMovie.getPoster_path()).resize(300, 450).into(coverIv);
 
             Picasso.with(mContext).load(AppData.base_picture_url + mMovie.getBackdrop_path()).into(backgroundIv);
         }
 
+
         return view;
     }
 
-    private void setCoverImage(ImageView coverIv, Movie movie) {
-    }
 }

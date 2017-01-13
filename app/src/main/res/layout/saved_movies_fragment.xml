@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
     <android.support.v7.widget.RecyclerView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/recycler_view_genres"
+        android:id="@+id/saved_movies_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
     <TextView
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -17,4 +16,4 @@
         tools:text="No data"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:text="NO DATA"/>
-</FrameLayout>
+</LinearLayout>

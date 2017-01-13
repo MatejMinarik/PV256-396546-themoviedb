@@ -1,8 +1,6 @@
 package cz.muni.fi.pv256.movio2.uco_396546_themoviedb;
 
-import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -31,19 +30,19 @@ import java.util.ArrayList;
 
 public class MainFragment extends Fragment {
 
-    private static final String TAG = MainFragment.class.getSimpleName();
+    public static final String TAG = MainFragment.class.getSimpleName();
     private static final String SELECTED_KEY = "selected_position";
     private static final int notificationID = 1;
 
     private int mPosition = 0;
     private MovieListRecyclerAdapter.ViewHolder.OnMovieSelectListener mListener;
     private Context mContext;
-    private RecyclerView mRecyclerView;
     private GenresListRecyclerAdapter mAdapter;
     private LayoutInflater mInflater;
-    private ViewGroup mViewGroup;
-    private Bundle mBundle;
     private ResponseReceiver mReceiver;
+
+    RecyclerView mRecyclerView;
+    TextView mErrorTextView;
 
     @Override
     public void onAttach(Context activity) {
@@ -94,12 +93,18 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mInflater = inflater;
-        mViewGroup = container;
-        mBundle = savedInstanceState;
 
         startDownload();
 
-        return createApropriateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.movie_genres_list_recycle_fragment, container, false);
+        Log.i("onCreateView:", "inflate movie_genres_list_recycle_fragment");
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_genres);
+        mErrorTextView = (TextView) view.findViewById(R.id.error_text);
+
+        updateViewApropriatly(savedInstanceState);
+
+        return view;
+
 
     }
 
@@ -117,43 +122,23 @@ public class MainFragment extends Fragment {
     }
 
     public void updateView(){
-        View thisView = this.getView();
-        View newView = createApropriateView(mInflater, mViewGroup, mBundle);
-        replaceView(thisView, newView);
+        updateViewApropriatly(null);
 
     }
 
-    public static ViewGroup getParent(View view) {
-        return (ViewGroup)view.getParent();
-    }
-
-    public static void removeView(View view) {
-        ViewGroup parent = getParent(view);
-        if(parent != null) {
-            parent.removeView(view);
-        }
-    }
-
-    public static void replaceView(View currentView, View newView) {
-        ViewGroup parent = getParent(currentView);
-        if(parent == null) {
-            return;
-        }
-        final int index = parent.indexOfChild(currentView);
-        removeView(currentView);
-        removeView(newView);
-        parent.addView(newView, index);
-    }
-
-    public View createApropriateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    public void updateViewApropriatly(Bundle savedInstanceState){
         ArrayList<Genre> genreList = GenresContainer.getInstance().getGenresList();
-        View view;
         if(isNetworkAvailable()) {
             if (genreList != null && !genreList.isEmpty()) {
-                view = inflater.inflate(R.layout.movie_genres_list_recycle_fragment, container, false);
-                Log.i("onCreateView:", "inflate movie_genres_list_recycle_fragment");
+                mRecyclerView.setVisibility(View.VISIBLE);
+                mErrorTextView.setVisibility(View.GONE);
 
-                fillRecycleView(view, genreList);
+                mRecyclerView.setHasFixedSize(true);
+
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                setGenreAdapter(mRecyclerView, genreList);
+
                 if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
                     mPosition = savedInstanceState.getInt(SELECTED_KEY);
 
@@ -162,14 +147,17 @@ public class MainFragment extends Fragment {
                     }
                 }
             } else {
-                view = inflater.inflate(R.layout.no_data_fragmet, container, false);
+                mRecyclerView.setVisibility(View.GONE);
+                mErrorTextView.setVisibility(View.VISIBLE);
+                mErrorTextView.setText("NO DATA");
                 Log.i("onCreateView:", "inflate empty");
             }
         }else{
-            view = inflater.inflate(R.layout.no_network_fragment, container, false);
+            mRecyclerView.setVisibility(View.GONE);
+            mErrorTextView.setVisibility(View.VISIBLE);
+            mErrorTextView.setText("NO NETWORK");
             Log.i("onCreateView:", "no network");
         }
-        return view;
     }
 
     @Override
@@ -183,22 +171,8 @@ public class MainFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
-    private void fillRecycleView(View rootView, ArrayList<Genre> genreList) {
-        // get data
-
-        //if (genreList != null && !genreList.isEmpty()){
-            mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView_genres);
-            mRecyclerView.setHasFixedSize(true);
-
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-            mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
-            setAdapter(mRecyclerView, genreList);
-        //}
-    }
-
-    private void setAdapter(RecyclerView filmRV, final ArrayList<Genre> genreList) {
-        mAdapter = new GenresListRecyclerAdapter(mListener, mContext, genreList);
+    private void setGenreAdapter(RecyclerView filmRV, final ArrayList<Genre> genreList) {
+        mAdapter = new GenresListRecyclerAdapter(mInflater, mListener, mContext, genreList);
         filmRV.setAdapter(mAdapter);
     }
 

@@ -19,7 +19,6 @@ public class Movie implements Parcelable {
     private float popularity;
     private int id;
 
-    //new data to save
     private boolean adult;
     private List<Integer> genre_ids;
     private String original_language;

@@ -1,21 +1,50 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:orientation="horizontal"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
 
-    <fragment android:name="cz.muni.fi.pv256.movio2.uco_396546_themoviedb.MainFragment"
-              android:id="@+id/movie_list_fragment"
-              android:layout_weight="1"
-              android:layout_width="0dp"
+    <!-- The main content view -->
+    <LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:tools="http://schemas.android.com/tools"
+                  android:orientation="horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent">
+
+        <FrameLayout
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/movie_list_fragment"
+            android:layout_weight="1"
+            tools:layout="@android:layout/list_content">
+
+        </FrameLayout>
+        <!--fragment android:name="cz.muni.fi.pv256.movio2.uco_396546_themoviedb.MainFragment"
+                  android:id="@+id/movie_list_fragment"
+                  android:layout_weight="1"
+                  android:layout_width="0dp"
+                  android:layout_height="match_parent"
+                  tools:context="cz.muni.fi.pv256.movio2.uco_396546_themoviedb.MainActivity"
+                  tools:layout="@android:layout/list_content"  /-->
+
+        <fragment android:name="cz.muni.fi.pv256.movio2.uco_396546_themoviedb.MovieDetaiFragment"
+                  android:id="@+id/movie_detail_fragment"
+                  android:layout_weight="2"
+                  android:layout_width="0dp"
+                  android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <ListView android:id="@+id/left_drawer"
+              android:layout_width="240dp"
               android:layout_height="match_parent"
-              tools:context="cz.muni.fi.pv256.movio2.uco_396546_themoviedb.MainActivity"
-              tools:layout="@android:layout/list_content"  />
+              android:layout_gravity="start"
+              android:choiceMode="singleChoice"
+              android:dividerHeight="0dp"
+              android:background="#111"/>
 
-    <fragment android:name="cz.muni.fi.pv256.movio2.uco_396546_themoviedb.MovieDetaiFragment"
-              android:id="@+id/movie_detail_fragment"
-              android:layout_weight="2"
-              android:layout_width="0dp"
-              android:layout_height="match_parent" />
-
-</LinearLayout>
+</android.support.v4.widget.DrawerLayout>
