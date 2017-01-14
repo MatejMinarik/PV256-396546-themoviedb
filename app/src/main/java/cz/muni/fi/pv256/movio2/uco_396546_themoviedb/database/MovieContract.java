@@ -1,4 +1,4 @@
-package cz.muni.fi.pv256.movio2.uco_396546_themoviedb;
+package cz.muni.fi.pv256.movio2.uco_396546_themoviedb.database;
 
 import android.content.ContentUris;
 import android.net.Uri;

@@ -40,6 +40,8 @@ public class DownloadIntentService extends IntentService {
     public static final String TEXT_IN = "text in";
     public static final String TEXT_OUT = "text out";
     public static final String IS_GENRE = "isGenre";
+    public static final String IS_SINGLE_MOVIE = "isSingleMovie";
+    public static final String MOVIE_ID = "movie_id";
     public static final String GENRES = "genres";
     public static final String MOVIES = "movies";
     public static final String GENRE_APP_ID = "genre app id";
@@ -78,14 +80,13 @@ public class DownloadIntentService extends IntentService {
         //process download
         intent.getStringExtra(TEXT_IN);
         boolean isGenre = intent.getBooleanExtra(IS_GENRE, false);
-        Log.d("Intent service downloding:", "is called");
+        Log.d("Intent service", "downloding: is called");
 
         List<Genre> genres = new ArrayList<>();
         List<Movie> movies = new ArrayList<>();
         if(isGenre){//Genres
 
             DownloadApiInterface apiService = RetrofitClient.getClient(deserializer).create(DownloadApiInterface.class);
-
 
             retrofit2.Call<GenresList> call = apiService.getGenres(AppData.api_key, "en-US");
 
@@ -108,15 +109,14 @@ public class DownloadIntentService extends IntentService {
 
             try {
                 GenreMoviesList genreMoviesList = call.execute().body();
-                if(genreMoviesList != null){
+                if (genreMoviesList != null) {
                     movies = genreMoviesList.getMovies();
-                }else{
+                } else {
                     Log.d("no data downloaded", call.request().toString());
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
 
 

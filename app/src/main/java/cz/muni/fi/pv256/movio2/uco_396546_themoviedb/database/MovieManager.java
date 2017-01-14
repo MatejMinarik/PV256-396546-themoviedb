@@ -1,4 +1,4 @@
-package cz.muni.fi.pv256.movio2.uco_396546_themoviedb;
+package cz.muni.fi.pv256.movio2.uco_396546_themoviedb.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,6 +7,9 @@ import android.database.Cursor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.Movie;
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.database.MovieContract;
 
 /**
  * Created by Huvart on 08/01/2017.
@@ -92,6 +95,13 @@ public class MovieManager {
         }
 
         return Collections.emptyList();
+    }
+
+    public void updateMovie(Movie movie){
+        if (movie == null) {
+            throw new NullPointerException("movie == null");
+        }
+        mContext.getContentResolver().update(MovieContract.MovieEntry.CONTENT_URI, prepareMovieValues(movie), WHERE_ID, new String[]{String.valueOf(movie.getId())});
     }
 
     private ContentValues prepareMovieValues(Movie movie) {

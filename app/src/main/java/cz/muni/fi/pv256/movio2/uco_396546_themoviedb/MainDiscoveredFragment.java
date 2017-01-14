@@ -1,16 +1,10 @@
 package cz.muni.fi.pv256.movio2.uco_396546_themoviedb;
 
 
-import android.app.NotificationManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,16 +15,17 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.database.MovieManager;
 
 /**
  * Created by Huvart on 12/01/2017.
  */
 
-public class MainDiscoverFragment extends Fragment {
+public class MainDiscoveredFragment extends Fragment {
 
-    public static final String TAG = MainDiscoverFragment.class.getSimpleName();
+    public static final String TAG = MainDiscoveredFragment.class.getSimpleName();
     private static final String SELECTED_KEY = "selected_position";
 
     private int mPosition = 0;

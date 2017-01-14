@@ -32,7 +32,7 @@ public class MainFragment extends Fragment {
 
     public static final String TAG = MainFragment.class.getSimpleName();
     private static final String SELECTED_KEY = "selected_position";
-    private static final int notificationID = 1;
+    public static final int notificationID = 1;
 
     private int mPosition = 0;
     private MovieListRecyclerAdapter.ViewHolder.OnMovieSelectListener mListener;

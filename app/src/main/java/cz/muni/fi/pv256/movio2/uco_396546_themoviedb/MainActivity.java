@@ -1,5 +1,7 @@
 package cz.muni.fi.pv256.movio2.uco_396546_themoviedb;
 
+import android.accounts.Account;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -11,10 +13,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.sync.UpdaterSyncAdapter;
 
 public class MainActivity extends AppCompatActivity implements MovieListRecyclerAdapter.ViewHolder.OnMovieSelectListener {
 
@@ -28,15 +31,18 @@ public class MainActivity extends AppCompatActivity implements MovieListRecycler
     private ArrayList<HamburgerMenuItem> mHamburgerMenuItems = new ArrayList<HamburgerMenuItem>();
 
     MainFragment mMainFragment;
-    MainDiscoverFragment mDiscoverFragment;
+    MainDiscoveredFragment mDiscoveredFragment;
+
+    Account mAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UpdaterSyncAdapter.initializeSyncAdapter(this);
         setContentView(R.layout.activity_main);
         mMainFragment = new MainFragment();
-        mDiscoverFragment = new MainDiscoverFragment();
-
+        mDiscoveredFragment = new MainDiscoveredFragment();
+        mAccount = UpdaterSyncAdapter.getSyncAccount(getApplicationContext());
 
         if (savedInstanceState == null) {
             if(mDiscover) {
@@ -47,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements MovieListRecycler
             }else{
 
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.movie_list_fragment, mDiscoverFragment, mDiscoverFragment.TAG)
+                        .replace(R.id.movie_list_fragment, mDiscoveredFragment, mDiscoveredFragment.TAG)
                         .commit();
             }
         }
@@ -85,7 +91,8 @@ public class MainActivity extends AppCompatActivity implements MovieListRecycler
 
         mHamburgerMenuItems.add(new HamburgerMenuItem("Discover"));
         mHamburgerMenuItems.add(new HamburgerMenuItem("Favourite"));
-        //mHamburgerMenuItems.add(new HamburgerMenuItem("Reload"));
+        mHamburgerMenuItems.add(new HamburgerMenuItem("Reload"));
+        mHamburgerMenuItems.add(new HamburgerMenuItem("Update database"));
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
             @Override
@@ -132,9 +139,19 @@ public class MainActivity extends AppCompatActivity implements MovieListRecycler
                 if(mDiscover){
                     mDiscover = false;
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.movie_list_fragment, mDiscoverFragment, MainDiscoverFragment.TAG)
+                            .replace(R.id.movie_list_fragment, mDiscoveredFragment, MainDiscoveredFragment.TAG)
                             .commit();
                 }
+                break;
+            case 2:
+                if(mDiscover){
+                    mMainFragment.updateViewApropriatly(null);
+                }else{
+                    mDiscoveredFragment.updateViewApropriatly(null);
+                }
+                break;
+            case 3:
+                UpdaterSyncAdapter.syncImmediately(getApplicationContext());
                 break;
             default:
                 Log.e("selecting from drawer", position + " is undefined");

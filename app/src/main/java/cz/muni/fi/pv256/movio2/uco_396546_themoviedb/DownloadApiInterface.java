@@ -16,4 +16,6 @@ public interface DownloadApiInterface {
     @GET("3/genre/{genre_id}/movies")
     Call<GenreMoviesList> getGenreMovies(@Path("genre_id") int genre_id, @Query("api_key") String apiKey, @Query("language") String langage, @Query("sort_by") String sortBy);
 
+    @GET("3/movie/{movie_id}")
+    Call<Movie> getMovie(@Path("movie_id") int movie_id, @Query("api_key") String apiKey, @Query("language") String langage);
 }

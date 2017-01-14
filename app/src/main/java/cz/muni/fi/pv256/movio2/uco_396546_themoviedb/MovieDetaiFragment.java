@@ -17,6 +17,8 @@ import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.database.MovieManager;
+
 
 /**
  * Created by Huvart on 10/10/16.

@@ -33,10 +33,5 @@ public class RetrofitClient {
                     .build();
         }
         return retrofit;
-
-
-
     }
-
-
 }

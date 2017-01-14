@@ -2,6 +2,8 @@
     <string name="app_name">uco_396546_themoviedb</string>
     <string name="content_authority">cz.muni.fi.pv256.movio2.uco_396546_themoviedb.app</string>
 
+    <string name="sync_account_type">themoviedb.org</string>
+
     <string name="drawer_open">drawer_open</string>
     <string name="drawer_close">drawer_close</string>
     <string name="action_settings">Settings</string>

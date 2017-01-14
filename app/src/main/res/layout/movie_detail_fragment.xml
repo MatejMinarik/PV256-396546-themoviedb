@@ -26,18 +26,6 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/detail_movie_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:paddingLeft="140dp"
-                android:textAppearance="?android:textAppearanceLarge"
-                android:textColor="@color/colorPrimaryText"
-                android:textSize="11pt"
-                android:layout_marginTop="300dp"
-                android:layout_marginLeft="120dp"/>
-
 
             <android.support.design.widget.FloatingActionButton
                 android:layout_width="wrap_content"
@@ -60,6 +48,15 @@
                 android:orientation="vertical"
                 android:layout_marginTop="300dp">
 
+                <TextView
+                    android:id="@+id/detail_movie_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="11pt"
+                    />
+
                 <LinearLayout
                     android:id="@+id/release_date_text"
                     android:layout_width="match_parent"
@@ -79,7 +76,8 @@
                         android:layout_height="match_parent"
                         android:textColor="@color/colorPrimaryText"
                         android:textAppearance="?android:textAppearanceLarge"
-                        android:textSize="8pt"/>
+                        android:textSize="8pt"
+                        android:paddingLeft="5dp"/>
 
                 </LinearLayout>
 
