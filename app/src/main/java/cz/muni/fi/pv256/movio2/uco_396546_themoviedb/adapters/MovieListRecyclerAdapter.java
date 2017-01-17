@@ -1,8 +1,6 @@
-package cz.muni.fi.pv256.movio2.uco_396546_themoviedb;
+package cz.muni.fi.pv256.movio2.uco_396546_themoviedb.adapters;
 
 import android.content.Context;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,61 +12,63 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.AppData;
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.R;
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.model.Movie;
+
 /**
- * Created by Huvart on 12/01/2017.
+ * Created by Huvart on 17/10/16.
  */
 
-public class MovieListDiscoverRecyclerAdapter extends RecyclerView.Adapter<MovieListDiscoverRecyclerAdapter.ViewHolder> {
+public class MovieListRecyclerAdapter extends RecyclerView.Adapter<MovieListRecyclerAdapter.ViewHolder> {
 
 
-    private MovieListRecyclerAdapter.ViewHolder.OnMovieSelectListener mListener;
     private Context mContext;
-    private List<Movie> mMoviesList;
-    private LayoutInflater mInflater;
+    private List<Movie> mData;
+    private ViewHolder.OnMovieSelectListener mListener;
 
-    public MovieListDiscoverRecyclerAdapter(LayoutInflater inflater, MovieListRecyclerAdapter.ViewHolder.OnMovieSelectListener listener, Context context, List<Movie> movies) {
-        mMoviesList = movies;
+    public MovieListRecyclerAdapter(ViewHolder.OnMovieSelectListener listener, Context context, List<Movie> data) {
         mContext = context;
+        mData = data;
         mListener = listener;
-        mInflater = inflater;
     }
 
-    public List<Movie> getMoviesList() {
-        return mMoviesList;
+    public List<Movie> getData() {
+        return mData;
     }
 
-    public void setMoviesList(List<Movie> movies) {
-        mMoviesList = movies;
+    public void setData(List<Movie> data) {
+        mData = data;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        //LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = mInflater.inflate(R.layout.list_item_saved_movie, parent, false);
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.list_item_movie, parent, false);
+        Log.i("onCreateViewHolder:", view.toString());
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(MovieListDiscoverRecyclerAdapter.ViewHolder holder, int position) {
-        Movie item = mMoviesList.get(position);
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        Movie item = mData.get(position);
         holder.bindView(mContext, item, mListener);
     }
 
     @Override
     public int getItemCount() {
-        return mMoviesList.size();
+        return mData.size();
     }
 
 
-    static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener  {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener  {
         public ImageView mCoverIv;
         public TextView mTextView;
         private Movie mMovie;
         private Context mContext;
-        private MovieListRecyclerAdapter.ViewHolder.OnMovieSelectListener mListener;
+        private OnMovieSelectListener mListener;
 
         public ViewHolder(View view) {
             super(view);
@@ -76,12 +76,11 @@ public class MovieListDiscoverRecyclerAdapter extends RecyclerView.Adapter<Movie
             mTextView = (TextView) view.findViewById(R.id.list_item_name);
         }
 
-        public void bindView(Context context, Movie movie, MovieListRecyclerAdapter.ViewHolder.OnMovieSelectListener listener) {
+        public void bindView(Context context, Movie movie, OnMovieSelectListener listener) {
             if (movie == null)  return;
             mMovie = movie;
             mContext = context;
-            Log.d("drowing picture", mContext.toString());
-            Log.d("drowing picture", mCoverIv.toString());
+
             Picasso.with(mContext).load(AppData.base_picture_url + movie.getPoster_path()).placeholder(R.drawable.sandclock_318_10212).error(R.drawable.no_image_available).into(mCoverIv);
             //Log.d("drowing picture", movie.getPoster_path());
 
@@ -117,4 +116,5 @@ public class MovieListDiscoverRecyclerAdapter extends RecyclerView.Adapter<Movie
             void onMovieSelect(Movie movie);
         }
     }
+
 }

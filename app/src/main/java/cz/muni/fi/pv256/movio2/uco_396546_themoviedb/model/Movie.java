@@ -1,4 +1,4 @@
-package cz.muni.fi.pv256.movio2.uco_396546_themoviedb;
+package cz.muni.fi.pv256.movio2.uco_396546_themoviedb.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

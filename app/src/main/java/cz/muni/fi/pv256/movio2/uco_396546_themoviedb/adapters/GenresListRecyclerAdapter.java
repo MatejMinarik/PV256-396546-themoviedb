@@ -1,4 +1,4 @@
-package cz.muni.fi.pv256.movio2.uco_396546_themoviedb;
+package cz.muni.fi.pv256.movio2.uco_396546_themoviedb.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -11,6 +11,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.R;
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.model.Genre;
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.model.Movie;
 
 /**
  * Created by Huvart on 23/10/2016.

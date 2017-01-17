@@ -1,9 +1,6 @@
-package cz.muni.fi.pv256.movio2.uco_396546_themoviedb;
-
-import android.util.Log;
+package cz.muni.fi.pv256.movio2.uco_396546_themoviedb.model;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Huvart on 23/10/2016.

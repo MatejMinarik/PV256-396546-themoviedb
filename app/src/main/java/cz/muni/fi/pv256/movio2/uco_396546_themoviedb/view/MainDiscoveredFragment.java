@@ -1,4 +1,4 @@
-package cz.muni.fi.pv256.movio2.uco_396546_themoviedb;
+package cz.muni.fi.pv256.movio2.uco_396546_themoviedb.view;
 
 
 import android.content.Context;
@@ -17,7 +17,11 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.database.MovieManager;
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.adapters.MovieListDiscoverRecyclerAdapter;
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.adapters.MovieListRecyclerAdapter;
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.R;
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.model.Movie;
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.presenter.MainDiscoveredFragmentPresenter;
 
 /**
  * Created by Huvart on 12/01/2017.
@@ -37,6 +41,8 @@ public class MainDiscoveredFragment extends Fragment {
     private LayoutInflater mInflater;
     RecyclerView mRecyclerView;
     TextView mErrorTextView;
+
+    MainDiscoveredFragmentPresenter mMainDiscoveredFragmentPresenter;
 
     @Override
     public void onAttach(Context activity) {
@@ -61,7 +67,7 @@ public class MainDiscoveredFragment extends Fragment {
 
         mContext = getActivity().getApplicationContext();
 
-
+        mMainDiscoveredFragmentPresenter = new MainDiscoveredFragmentPresenter(this);
     }
 
     @Override
@@ -86,7 +92,7 @@ public class MainDiscoveredFragment extends Fragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.saved_movies_recycler_view);
         mErrorTextView = (TextView) view.findViewById(R.id.error_text);
 
-        updateViewApropriatly(savedInstanceState);
+        mMainDiscoveredFragmentPresenter.updateViewApropriatly(savedInstanceState);
         return view;
 
     }
@@ -99,32 +105,35 @@ public class MainDiscoveredFragment extends Fragment {
         super.onDestroyView();
     }
 
-    public void updateViewApropriatly(Bundle savedInstanceState) {
-        MovieManager movieManager = new MovieManager(getContext());
-        List<Movie> movies = movieManager.getMovies();
-        if (movies != null && !movies.isEmpty()) {
-            mRecyclerView.setVisibility(View.VISIBLE);
-            mErrorTextView.setVisibility(View.GONE);
+    public void updateView(){
+        mMainDiscoveredFragmentPresenter.updateViewApropriatly(null);
+    }
 
-            mRecyclerView.setHasFixedSize(true);
+    public void setMainFragmentMainLayout(List<Movie> movies, Bundle savedInstanceState){
+        mRecyclerView.setVisibility(View.VISIBLE);
+        mErrorTextView.setVisibility(View.GONE);
 
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-            mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-            setMovieAdapter(mRecyclerView, movies);
+        mRecyclerView.setHasFixedSize(true);
 
-            if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
-                mPosition = savedInstanceState.getInt(SELECTED_KEY);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        setMovieAdapter(mRecyclerView, movies);
 
-                if (mPosition != ListView.INVALID_POSITION) {
-                    mRecyclerView.smoothScrollToPosition(mPosition);
-                }
+        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
+            mPosition = savedInstanceState.getInt(SELECTED_KEY);
+
+            if (mPosition != ListView.INVALID_POSITION) {
+                mRecyclerView.smoothScrollToPosition(mPosition);
             }
-        } else {
-            mRecyclerView.setVisibility(View.GONE);
-            mErrorTextView.setVisibility(View.VISIBLE);
-            mErrorTextView.setText("NO FAVOURITE MOVIES");
         }
     }
+
+    public void setMainFragmentErrorLayout(String errorMsg){
+        mRecyclerView.setVisibility(View.GONE);
+        mErrorTextView.setVisibility(View.VISIBLE);
+        mErrorTextView.setText("NO FAVOURITE MOVIES");
+    }
+
 
     private void setMovieAdapter(RecyclerView filmRV, final List<Movie> movieList) {
         mAdapter = new MovieListDiscoverRecyclerAdapter(mInflater, mListener, mContext, movieList);

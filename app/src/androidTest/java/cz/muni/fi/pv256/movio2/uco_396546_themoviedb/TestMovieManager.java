@@ -8,6 +8,7 @@ import java.util.List;
 
 import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.database.MovieContract;
 import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.database.MovieManager;
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.model.Movie;
 
 /**
  * Created by Huvart on 12/01/2017.

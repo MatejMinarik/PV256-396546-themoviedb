@@ -1,4 +1,4 @@
-package cz.muni.fi.pv256.movio2.uco_396546_themoviedb;
+package cz.muni.fi.pv256.movio2.uco_396546_themoviedb.adapters;
 
 
 import android.content.Context;
@@ -6,10 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.R;
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.model.DownloadApiInterface;
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.model.HamburgerMenuItem;
 
 /**
  * Created by Huvart on 08/01/2017.
@@ -53,7 +56,7 @@ public class DrawerListAdapter extends BaseAdapter {
         TextView titleView = (TextView) view.findViewById(R.id.drawer_item_text);
         //ImageView iconView = (ImageView) view.findViewById(R.id.icon);
 
-        titleView.setText( mNavItems.get(position).mText );
+        titleView.setText( mNavItems.get(position).getText() );
         //iconView.setImageResource(mNavItems.get(position).mIcon);
 
         return view;

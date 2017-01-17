@@ -1,4 +1,4 @@
-package cz.muni.fi.pv256.movio2.uco_396546_themoviedb;
+package cz.muni.fi.pv256.movio2.uco_396546_themoviedb.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -27,19 +27,19 @@ public class Genre implements Parcelable{
         id = genereId;
     }
 
-    List<Movie> getMovieList(){
+    public List<Movie> getMovieList(){
         return mMovieList;
     }
 
-    void setMovieList(List<Movie> movieList){
+    public void setMovieList(List<Movie> movieList){
         mMovieList = movieList;
     }
 
-    String getGanreName(){
+    public String getGanreName(){
         return name;
     }
 
-    void setGanreName(String ganreName){
+    public void setGanreName(String ganreName){
         name = ganreName;
     }
 

@@ -5,16 +5,9 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -24,12 +17,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import okhttp3.Call;
-import okhttp3.Callback;
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.model.DownloadApiInterface;
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.model.Genre;
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.model.GenreMoviesList;
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.model.GenresList;
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.model.Movie;
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.presenter.MainFragmentPresenter;
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.view.MainFragment;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import retrofit2.http.GET;
 
 /**
  * Created by Huvart on 04/11/2016.
@@ -49,7 +44,7 @@ public class DownloadIntentService extends IntentService {
 
     private static final OkHttpClient client = new OkHttpClient();
 
-    DownloadIntentService(){
+    public DownloadIntentService(){
         super(DownloadIntentService.class.getName());
     }
 
@@ -122,7 +117,7 @@ public class DownloadIntentService extends IntentService {
 
         //Broadcast
         Intent brocastIntent = new Intent();
-        brocastIntent.setAction(MainFragment.ResponseReceiver.LOCAL_DOWNLOAD);
+        brocastIntent.setAction(MainFragmentPresenter.ResponseReceiver.LOCAL_DOWNLOAD);
         brocastIntent.addCategory(Intent.CATEGORY_DEFAULT);
 
         brocastIntent.putExtra(IS_GENRE, isGenre);

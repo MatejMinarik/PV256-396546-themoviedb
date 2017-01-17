@@ -2,6 +2,7 @@
                 android:layout_width="127dp"
                 android:layout_height="220dp" >
     <FrameLayout
+        android:id="@+id/list_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

@@ -1,4 +1,4 @@
-package cz.muni.fi.pv256.movio2.uco_396546_themoviedb;
+package cz.muni.fi.pv256.movio2.uco_396546_themoviedb.model;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -18,4 +18,5 @@ public interface DownloadApiInterface {
 
     @GET("3/movie/{movie_id}")
     Call<Movie> getMovie(@Path("movie_id") int movie_id, @Query("api_key") String apiKey, @Query("language") String langage);
+
 }

@@ -23,15 +23,15 @@
             tools:layout="@android:layout/list_content">
 
         </FrameLayout>
-        <!--fragment android:name="cz.muni.fi.pv256.movio2.uco_396546_themoviedb.MainFragment"
+        <!--fragment android:name="cz.muni.fi.pv256.movio2.uco_396546_themoviedb.view.MainFragment"
                   android:id="@+id/movie_list_fragment"
                   android:layout_weight="1"
                   android:layout_width="0dp"
                   android:layout_height="match_parent"
-                  tools:context="cz.muni.fi.pv256.movio2.uco_396546_themoviedb.MainActivity"
+                  tools:context="cz.muni.fi.pv256.movio2.uco_396546_themoviedb.view.MainActivity"
                   tools:layout="@android:layout/list_content"  /-->
 
-        <fragment android:name="cz.muni.fi.pv256.movio2.uco_396546_themoviedb.MovieDetaiFragment"
+        <fragment android:name="cz.muni.fi.pv256.movio2.uco_396546_themoviedb.view.MovieDetailFragment"
                   android:id="@+id/movie_detail_fragment"
                   android:layout_weight="2"
                   android:layout_width="0dp"

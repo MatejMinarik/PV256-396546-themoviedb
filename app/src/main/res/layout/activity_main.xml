@@ -10,10 +10,10 @@ android:orientation="vertical">
 <!--fragment xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
           android:id="@+id/movie_list_fragment"
-          android:name="cz.muni.fi.pv256.movio2.uco_396546_themoviedb.MainFragment"
+          android:name="cz.muni.fi.pv256.movio2.uco_396546_themoviedb.view.MainFragment"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          tools:context="cz.muni.fi.pv256.movio2.uco_396546_themoviedb.MainActivity"
+          tools:context="cz.muni.fi.pv256.movio2.uco_396546_themoviedb.view.MainActivity"
           tools:layout="@android:layout/list_content" /-->
 
     <FrameLayout

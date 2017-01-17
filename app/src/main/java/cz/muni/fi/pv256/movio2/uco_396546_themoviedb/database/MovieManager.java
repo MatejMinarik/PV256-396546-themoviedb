@@ -8,8 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.Movie;
-import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.database.MovieContract;
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.model.Movie;
 
 /**
  * Created by Huvart on 08/01/2017.
@@ -30,7 +29,7 @@ public class MovieManager {
     public static final int COL_MOVIE_OVERVIEW = 10;
     public static final int COL_MOVIE_VOTE_AVERAGE = 11;
     public static final int COL_MOVIE_VOTE_COUNT = 12;
-    private static final String[] MOVIE_COLUMNS = {
+    public static final String[] MOVIE_COLUMNS = {
             MovieContract.MovieEntry._ID,
             MovieContract.MovieEntry.COLUMN_RELEASE_DATE_TEXT,
             MovieContract.MovieEntry.COLUMN_POSTER_PATH_TEXT,
@@ -50,7 +49,7 @@ public class MovieManager {
     private static final String LOCAL_DATE_FORMAT = "yyyyMMdd";
 
     private static final String WHERE_ID = MovieContract.MovieEntry._ID + " = ?";
-    private static final String WHERE_ALL = "";
+    public static final String WHERE_ALL = "";
     //private static final String WHERE_DAY = MovieContract.MovieEntry.COLUMN_END_DATE_TEXT + " IS NOT NULL AND substr(" + MovieContract.MovieEntry.COLUMN_START_DATE_TEXT + ",1,8) = ? OR " + "substr(" + MovieContract.MovieEntry.COLUMN_END_DATE_TEXT + ",1,8) = ?";
     //private static final String WHERE_DATES = MovieContract.MovieEntry.COLUMN_END_DATE_TEXT + " IS NOT NULL AND substr(" + MovieContract.MovieEntry.COLUMN_END_DATE_TEXT + ",1,8) >= ? AND " + "substr(" + MovieContract.MovieEntry.COLUMN_START_DATE_TEXT + ",1,8) <= ?";
 
@@ -59,6 +58,8 @@ public class MovieManager {
     public MovieManager(Context context) {
         mContext = context.getApplicationContext();
     }
+
+
 
     public void createMovie(Movie movie) {
         if (movie == null) {
