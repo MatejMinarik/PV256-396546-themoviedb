@@ -15,6 +15,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.AppData;
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.BuildConfig;
 import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.R;
 import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.model.Movie;
 
@@ -81,8 +82,10 @@ public class MovieListDiscoverRecyclerAdapter extends RecyclerView.Adapter<Movie
             if (movie == null)  return;
             mMovie = movie;
             mContext = context;
-            Log.d("drowing picture", mContext.toString());
-            Log.d("drowing picture", mCoverIv.toString());
+            if(BuildConfig.LOGING) {
+                Log.d("drowing picture", mContext.toString());
+                Log.d("drowing picture", mCoverIv.toString());
+            }
             Picasso.with(mContext).load(AppData.base_picture_url + movie.getPoster_path()).placeholder(R.drawable.sandclock_318_10212).error(R.drawable.no_image_available).into(mCoverIv);
             //Log.d("drowing picture", movie.getPoster_path());
 
@@ -101,7 +104,9 @@ public class MovieListDiscoverRecyclerAdapter extends RecyclerView.Adapter<Movie
         @Override
         public void onClick(View v) {
             // set on click listener
-            Log.i("clicked:",mMovie.getTitle());
+            if(BuildConfig.LOGING) {
+                Log.i("clicked:", mMovie.getTitle());
+            }
             mListener.onMovieSelect(mMovie);
         }
 

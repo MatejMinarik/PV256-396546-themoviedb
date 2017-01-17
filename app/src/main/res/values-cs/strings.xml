@@ -1,0 +1,9 @@
+<resources>
+    <string name="NO_DATA">ŽÁDNÁ DATA</string>
+    <string name="NO_NETWORK">ŽÁDNÁ SÍŤ</string>
+    <string name="NO_FAVOURITE_MOVIES">ŽÁDNÉ OBLÍBENÉ FILMY</string>
+    <string name="DISCOVER">Objavovanie</string>
+    <string name="FAVOURITE">Obľubené</string>
+    <string name="RELOAD">Znovu načítať</string>
+    <string name="UPDATE_DATABASE">Obnoviť dáta uložené v databázi</string>
+</resources>

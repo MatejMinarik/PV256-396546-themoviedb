@@ -45,7 +45,9 @@ public class TestMovieManager extends AndroidTestCase {
         mManager.createMovie(movie2);
 
         List<Movie> movies = mManager.getMovies();
-        Log.d(TAG, movies.toString());
+        if(BuildConfig.LOGING) {
+            Log.d(TAG, movies.toString());
+        }
         assertTrue(movies.size() == 2);
     }
 

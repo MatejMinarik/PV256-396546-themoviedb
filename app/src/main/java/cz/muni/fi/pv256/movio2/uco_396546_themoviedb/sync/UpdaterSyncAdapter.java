@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.List;
 
 import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.AppData;
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.BuildConfig;
 import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.model.DownloadApiInterface;
 import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.view.MainFragment;
 import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.model.Movie;
@@ -170,13 +171,17 @@ public class UpdaterSyncAdapter extends AbstractThreadedSyncAdapter {
             retrofit2.Call<Movie> call = apiService.getMovie(movies.get(i).getId(), AppData.api_key, "en-US");
 
             Movie reference_movie = movies.get(i);
-            Log.d("Sync Adapter", "ubdating movie " + reference_movie.getTitle());
+            if(BuildConfig.LOGING) {
+                Log.d("Sync Adapter", "ubdating movie " + reference_movie.getTitle());
+            }
             try {
                 Movie movie = call.execute().body();
                 if(movie != null){
                     processCompareUpdateMovies(reference_movie, movie, movieManager);
                 }else{
-                    Log.d("no data downloaded", call.request().toString());
+                    if(BuildConfig.LOGING) {
+                        Log.d("no data downloaded", call.request().toString());
+                    }
                     break;
                 }
             } catch (IOException e) {

@@ -15,6 +15,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.AppData;
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.BuildConfig;
 import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.R;
 import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.model.Movie;
 
@@ -47,7 +48,9 @@ public class MovieListRecyclerAdapter extends RecyclerView.Adapter<MovieListRecy
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.list_item_movie, parent, false);
-        Log.i("onCreateViewHolder:", view.toString());
+        if(BuildConfig.LOGING) {
+            Log.i("onCreateViewHolder:", view.toString());
+        }
         return new ViewHolder(view);
     }
 
@@ -99,7 +102,9 @@ public class MovieListRecyclerAdapter extends RecyclerView.Adapter<MovieListRecy
         @Override
         public void onClick(View v) {
             // set on click listener
-            Log.i("clicked:",mMovie.getTitle());
+            if(BuildConfig.LOGING) {
+                Log.i("clicked:", mMovie.getTitle());
+            }
             mListener.onMovieSelect(mMovie);
         }
 

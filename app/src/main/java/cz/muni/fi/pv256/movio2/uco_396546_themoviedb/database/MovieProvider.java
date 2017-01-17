@@ -11,6 +11,8 @@ import android.util.Log;
 
 import java.util.Arrays;
 
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.BuildConfig;
+
 /**
  * Created by Huvart on 08/01/2017.
  */
@@ -44,7 +46,9 @@ public class MovieProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        Log.d(TAG, Arrays.toString(selectionArgs));
+        if(BuildConfig.LOGING) {
+            Log.d(TAG, Arrays.toString(selectionArgs));
+        }
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
             case MOVIE_ID: {
@@ -95,7 +99,9 @@ public class MovieProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        Log.d(TAG, values.toString());
+        if(BuildConfig.LOGING) {
+            Log.d(TAG, values.toString());
+        }
 
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);

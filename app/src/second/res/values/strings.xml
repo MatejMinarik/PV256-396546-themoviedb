@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="content_authority" translatable="false">cz.muni.fi.pv256.movio2.comletly_different.app</string>
+    <string name="app_name" translatable="false">second name of this thing</string>
+</resources>

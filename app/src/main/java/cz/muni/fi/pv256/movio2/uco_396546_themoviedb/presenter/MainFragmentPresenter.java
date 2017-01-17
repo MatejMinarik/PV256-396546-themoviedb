@@ -91,10 +91,10 @@ public class MainFragmentPresenter {
                 if(isNetworkAvailable()) {
                     getMainFragment().setMainFragmentMainLayout(genreList, savedInstanceState);
                 }else{
-                    getMainFragment().setMainFragmentErrorLayout("NO NETWORK");
+                    getMainFragment().setMainFragmentErrorLayout(getMainFragment().getString(R.string.NO_NETWORK));
                 }
             } else {
-                getMainFragment().setMainFragmentErrorLayout("NO DATA");
+                getMainFragment().setMainFragmentErrorLayout(getMainFragment().getString(R.string.NO_DATA));
             }
 
         }catch (NullPointerException e){

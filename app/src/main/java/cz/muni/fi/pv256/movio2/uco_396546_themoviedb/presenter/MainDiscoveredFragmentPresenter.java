@@ -1,11 +1,13 @@
 package cz.muni.fi.pv256.movio2.uco_396546_themoviedb.presenter;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
 
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.R;
 import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.database.MovieManager;
 import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.model.Movie;
 import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.view.MainDiscoveredFragment;
@@ -33,16 +35,24 @@ public class MainDiscoveredFragmentPresenter {
 
 
     public void updateViewApropriatly(Bundle savedInstanceState) {
-        MovieManager movieManager = new MovieManager(getMainDiscoveredFragment().getContext());
-        updateViewApropriatly(savedInstanceState, movieManager);
+        try {
+            MovieManager movieManager = new MovieManager(getMainDiscoveredFragment().getContext());
+            updateViewApropriatly(savedInstanceState, movieManager);
+        }catch (NullPointerException e){
+            Log.e("updateViewApropriatly", e.toString());
+        }
     }
 
     public void updateViewApropriatly(Bundle savedInstanceState,MovieManager movieManager) {
-        List<Movie> movies = movieManager.getMovies();
-        if (movies != null && !movies.isEmpty()) {
-            getMainDiscoveredFragment().setMainFragmentMainLayout(movies, savedInstanceState);
-        } else {
-            getMainDiscoveredFragment().setMainFragmentErrorLayout("NO FAVOURITE MOVIES");
+        try {
+            List<Movie> movies = movieManager.getMovies();
+            if (movies != null && !movies.isEmpty()) {
+                getMainDiscoveredFragment().setMainFragmentMainLayout(movies, savedInstanceState);
+            } else {
+                getMainDiscoveredFragment().setMainFragmentErrorLayout(getMainDiscoveredFragment().getString(R.string.NO_FAVOURITE_MOVIES));
+            }
+        }catch (NullPointerException e){
+            Log.e("updateViewApropriatly", e.toString());
         }
     }
 }

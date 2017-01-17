@@ -75,7 +75,9 @@ public class DownloadIntentService extends IntentService {
         //process download
         intent.getStringExtra(TEXT_IN);
         boolean isGenre = intent.getBooleanExtra(IS_GENRE, false);
-        Log.d("Intent service", "downloding: is called");
+        if(BuildConfig.LOGING) {
+            Log.d("Intent service", "downloding: is called");
+        }
 
         List<Genre> genres = new ArrayList<>();
         List<Movie> movies = new ArrayList<>();
@@ -90,7 +92,9 @@ public class DownloadIntentService extends IntentService {
                 if(genresList != null){
                     genres = genresList.getGenres();
                 }else{
-                    Log.d("no data downloaded", call.request().toString());
+                    if(BuildConfig.LOGING) {
+                        Log.d("no data downloaded", call.request().toString());
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -107,7 +111,9 @@ public class DownloadIntentService extends IntentService {
                 if (genreMoviesList != null) {
                     movies = genreMoviesList.getMovies();
                 } else {
-                    Log.d("no data downloaded", call.request().toString());
+                    if(BuildConfig.LOGING) {
+                        Log.d("no data downloaded", call.request().toString());
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();

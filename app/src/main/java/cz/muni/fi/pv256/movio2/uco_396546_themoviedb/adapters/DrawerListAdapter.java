@@ -2,6 +2,7 @@ package cz.muni.fi.pv256.movio2.uco_396546_themoviedb.adapters;
 
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +53,6 @@ public class DrawerListAdapter extends BaseAdapter {
         }else {
             view = convertView;
         }
-
         TextView titleView = (TextView) view.findViewById(R.id.drawer_item_text);
         //ImageView iconView = (ImageView) view.findViewById(R.id.icon);
 
