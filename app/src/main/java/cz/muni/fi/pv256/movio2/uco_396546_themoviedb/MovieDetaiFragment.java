@@ -1,9 +1,9 @@
 package cz.muni.fi.pv256.movio2.uco_396546_themoviedb;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import cz.muni.fi.pv256.movio2.uco_396546_themoviedb.database.MovieManager;
 
 
 /**
@@ -24,6 +31,7 @@ public class MovieDetaiFragment extends Fragment {
 
     private Movie mMovie;
     private Context mContext;
+    private boolean mFavourite;
 
     public static MovieDetaiFragment newInstance(Movie movie) {
         MovieDetaiFragment fragment = new MovieDetaiFragment();
@@ -35,12 +43,12 @@ public class MovieDetaiFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         mContext = getActivity();
         Bundle args = getArguments();
         if (args != null) {
             mMovie = args.getParcelable(ARGS_MOVIE);
         }
+        super.onCreate(savedInstanceState);
     }
 
     @Nullable
@@ -59,24 +67,48 @@ public class MovieDetaiFragment extends Fragment {
         }
         View view = inflater.inflate(R.layout.movie_detail_fragment, container, false);
 
-        TextView titleTv = (TextView) view.findViewById(R.id.detail_movie);
-        TextView titleLowTv = (TextView) view.findViewById(R.id.detail_movie_low);
+        TextView titleTv = (TextView) view.findViewById(R.id.detail_movie_title);
+        TextView titleLowTv = (TextView) view.findViewById(R.id.detail_movie_overview_text);
+        TextView releaseDateTextView = (TextView) view.findViewById(R.id.detail_movie_release_date);
         ImageView coverIv = (ImageView) view.findViewById(R.id.detail_icon);
+        ImageView backgroundIv = (ImageView) view.findViewById(R.id.background_picture);
+        final FloatingActionButton saveToDatabaseActionButton = (FloatingActionButton) view.findViewById(R.id.floatingActionButton);
 
         if (mMovie != null) {
             titleTv.setText(mMovie.getTitle());
-            titleLowTv.setText(mMovie.getBackdrop());
-            setCoverImage(coverIv, mMovie);
+            titleLowTv.setText(mMovie.getOverview());
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            releaseDateTextView.setText(simpleDateFormat.format(new Date( mMovie.getRelease_date())));
+            final MovieManager movieManager = new MovieManager(mContext);
+            if(movieManager.movieExist(mMovie)){
+                mFavourite = true;
+                saveToDatabaseActionButton.setImageResource(android.R.drawable.btn_star_big_on);
+            }else{
+                mFavourite = false;
+                saveToDatabaseActionButton.setImageResource(android.R.drawable.btn_star_big_off);
+            }
+            saveToDatabaseActionButton.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View onClickView){
+                    if(mFavourite){
+                        movieManager.deleteMovie(mMovie);
+                        mFavourite = false;
+                        saveToDatabaseActionButton.setImageResource(android.R.drawable.btn_star_big_off);
+                    }else{
+                        movieManager.createMovie(mMovie);
+                        mFavourite = true;
+                        saveToDatabaseActionButton.setImageResource(android.R.drawable.btn_star_big_on);
+                    }
+                    Log.d("======================", mMovie.getTitle());
+                }
+            });
+
+            Picasso.with(mContext).load(AppData.base_picture_url + mMovie.getPoster_path()).resize(300, 450).into(coverIv);
+
+            Picasso.with(mContext).load(AppData.base_picture_url + mMovie.getBackdrop_path()).into(backgroundIv);
         }
+
 
         return view;
     }
 
-    private void setCoverImage(ImageView coverIv, Movie movie) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            coverIv.setImageDrawable(mContext.getDrawable(movie.mCoverId));
-        } else {
-            coverIv.setImageDrawable(mContext.getResources().getDrawable(movie.mCoverId, mContext.getTheme()));
-        }
-    }
 }
