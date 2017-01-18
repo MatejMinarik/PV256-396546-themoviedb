@@ -4,4 +4,4 @@
      android:id="@+id/movie_detail_fragment"
      android:layout_width="match_parent"
      android:layout_height="match_parent"
-     tools:context="cz.muni.fi.pv256.movio2.uco_396546_themoviedb.MovieDetailActivity" />
+     tools:context="cz.muni.fi.pv256.movio2.uco_396546_themoviedb.view.MovieDetailActivity" />
