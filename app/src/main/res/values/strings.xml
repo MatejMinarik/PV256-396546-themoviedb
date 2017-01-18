@@ -1,3 +1,20 @@
 <resources>
-    <string name="app_name">uco_396546_themoviedb</string>
+    <string name="app_name" translatable="false">uco_396546_themoviedb</string>
+    <string name="content_authority" translatable="false">cz.muni.fi.pv256.movio2.uco_396546_themoviedb.app</string>
+
+    <string name="sync_account_type" translatable="false">themoviedb.org</string>
+
+    <string name="drawer_open" translatable="false">drawer_open</string>
+    <string name="drawer_close" translatable="false">drawer_close</string>
+    <string name="action_settings" translatable="false">Settings</string>
+
+
+    <string name="NO_DATA">NO DATA</string>
+    <string name="NO_NETWORK">NO NETWORK</string>
+    <string name="NO_FAVOURITE_MOVIES">NO FAVOURITE MOVIES</string>
+    <string name="DISCOVER">Discover</string>
+    <string name="FAVOURITE">Favourite</string>
+    <string name="RELOAD">Reload</string>
+    <string name="UPDATE_DATABASE">Update database</string>
+
 </resources>
