@@ -77,7 +77,7 @@ public class MovieDetaiFragment extends Fragment {
         if (mMovie != null) {
             titleTv.setText(mMovie.getTitle());
             titleLowTv.setText(mMovie.getOverview());
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd");
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             releaseDateTextView.setText(simpleDateFormat.format(new Date( mMovie.getRelease_date())));
             final MovieManager movieManager = new MovieManager(mContext);
             if(movieManager.movieExist(mMovie)){
