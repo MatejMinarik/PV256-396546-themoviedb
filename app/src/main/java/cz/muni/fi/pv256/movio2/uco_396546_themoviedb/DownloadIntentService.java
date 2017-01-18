@@ -59,7 +59,7 @@ public class DownloadIntentService extends IntentService {
                 }
                 else{
                     String dateString = json.getAsString();
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd");
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     long dateLong = 0;
                     try {
                         Date releaseDate = simpleDateFormat.parse(dateString);
